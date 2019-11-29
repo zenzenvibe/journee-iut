@@ -24,6 +24,13 @@
     docker-compose up -d
     cd ..
 
+    Une fois la config définitive, remplacer dans traefik_acme/traefik.toml
+    caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
+    par
+    caServer = "https://acme-v02.api.letsencrypt.org/directory"
+
+
+
     cp www_site/conf/htpasswd.ori www_site/conf/htpasswd
     htpasswd -b ./htpasswd user passwd
     docker-compose up -d
