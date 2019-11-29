@@ -12,6 +12,9 @@
 
 # Installation initiale
 
+## Installation du proxy HTTPS Traefik
+
+
     git clone https://github.com/jossets/journee-iut.git
     cd journee-iut/
 
@@ -31,8 +34,12 @@
 
 
 
+## Instalaltion du serveur web
+
+Définir un LOGIN PASSWDORD pour accéder aux info d'administration
+
     cp www_site/conf/htpasswd.ori www_site/conf/htpasswd
-    htpasswd -b ./htpasswd user passwd
+    htpasswd -b ./htpasswd LOGIN PASSWORD
     docker-compose up -d
 
 
