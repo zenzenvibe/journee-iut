@@ -53,6 +53,6 @@ services:
 
 networks:
   traefikacme_ctf_register_lan:
-    driver: external
+    external: true
   ctf_register_lan_php:
     driver: bridge
