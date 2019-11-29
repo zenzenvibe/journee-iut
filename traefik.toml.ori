@@ -19,12 +19,12 @@ defaultEntryPoints = ["https","http"]
 
 [docker]
 endpoint = "unix:///var/run/docker.sock"
-#domain = "yoloctf.org"
+#domain = "XXXXXXXXX.org"
 watch = true
 exposedByDefault = false
 
 [acme]
-email = "admin@yoloctf.org"
+email = "XXXXXXXXX@email.com"
 storage = "acme.json"
 entryPoint = "https"
 #onHostRule = true
@@ -35,4 +35,4 @@ acmeLogging = true
 entryPoint = "http"
 
 [[acme.domains]]
-main = "yoloctf.org"
+main = "XXXXXXX.org"
