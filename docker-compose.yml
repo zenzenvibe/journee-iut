@@ -21,7 +21,7 @@ services:
     labels:
       - "traefik.backend=webserver"
       - "traefik.docker.network=traefikacme_ctf_register_lan"
-      - "traefik.frontend.rule=PathPrefix:/ctf/"      
+      - "traefik.frontend.rule=PathPrefixStrip: /ctf"      
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.headers.SSLRedirect=true"
       - "traefik.enable=true"
