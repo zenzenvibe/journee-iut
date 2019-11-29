@@ -19,13 +19,14 @@
     Mettre à  jour les champs en XXXXX
 
     cp traefik_acme/acme.json.default traefik_acme/acme.json
+    chmod 600 traefik_acme/acme.json
     cd traefik_acme
-    docker-compose up
+    docker-compose up -d
     cd ..
 
     cp www_site/conf/htpasswd.ori www_site/conf/htpasswd
     htpasswd -b ./htpasswd user passwd
-    docker-compose up
+    docker-compose up -d
 
 
 

@@ -52,7 +52,7 @@ services:
     
 
 networks:
-  ctf_register_lan:
+  traefikacme_ctf_register_lan:
     driver: external
   ctf_register_lan_php:
     driver: bridge
