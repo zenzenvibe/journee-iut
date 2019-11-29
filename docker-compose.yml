@@ -11,7 +11,7 @@ services:
     image: nginx:1.17
     container_name: webserver_register_nginx
     networks:
-      ctf_register_lan:
+      traefikacme_ctf_register_lan:
       ctf_register_lan_php:
     volumes:
       - ./www_site:/www_site
