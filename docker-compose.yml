@@ -3,15 +3,14 @@
 #
 version: '3.3'
 
-
 services:
-
 
   webserver_register_nginx:
     image: nginx:1.17
     container_name: webserver_register_nginx
     networks:
       traefikacme_ctf_register_lan:
+      #traefik_ctf_register_lan:
       ctf_register_lan_php:
     volumes:
       - ./www_site:/www_site
@@ -20,8 +19,8 @@ services:
       - webserver_register_php
     labels:
       - "traefik.backend=webserver"
-      - "traefik.docker.network=traefikacme_ctf_register_lan"
-      - "traefik.frontend.rule=PathPrefixStrip: /ctf"      
+      - "traefik.docker.network=traefik_ctf_register_lan"
+      - "traefik.frontend.rule=Host:dayctf.iut-rt.net"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.headers.SSLRedirect=true"
       - "traefik.enable=true"
@@ -52,6 +51,8 @@ services:
     
 
 networks:
+  traefik_ctf_register_lan:
+    external: true
   traefikacme_ctf_register_lan:
     external: true
   ctf_register_lan_php:

@@ -28,27 +28,42 @@
                 while ($row = $results->fetchArray()) {
 
 
-            ?>
-                <div class="columns">
-                    <label class="label column"><?php echo htmlspecialchars($row['id']); ?></label>
-                    <label class="label column"><?php echo htmlspecialchars($row['etablissement']); ?></label>
-                    <label class="label column"><?php echo htmlspecialchars($row['nom1']); ?></label>
-                    <label class="label column"><?php echo htmlspecialchars($row['prenom1']); ?></label>
-                    <label class="label column"><?php echo htmlspecialchars($row['email1']); ?></label>
-                    <label class="label column"><?php echo htmlspecialchars($row['nom2']); ?></label>
-                    <label class="label column"><?php echo htmlspecialchars($row['prenom2']); ?></label>
-                    <label class="label column"><?php echo htmlspecialchars($row['email2']); ?></label>
-                </div>
-            <?php
+                    ?>
+                    <div class="columns">
+                        <label class="label column"><?php echo htmlspecialchars($row['id']); ?></label>
+                        <label class="label column"><?php echo htmlspecialchars($row['etablissement']); ?></label>
+                        <label class="label column"><?php echo htmlspecialchars($row['nom1']); ?></label>
+                        <label class="label column"><?php echo htmlspecialchars($row['prenom1']); ?></label>
+                        <label class="label column"><?php echo htmlspecialchars($row['email1']); ?></label>
+                        <label class="label column"><?php echo htmlspecialchars($row['nom2']); ?></label>
+                        <label class="label column"><?php echo htmlspecialchars($row['prenom2']); ?></label>
+                        <label class="label column"><?php echo htmlspecialchars($row['email2']); ?></label>
+                    </div>
+                <?php
                 }
             }
-            ?>
+            if (file_exists('../conf/ctf_iut_flags.sqlite')) {
+                $db = new SQLite3('../conf/ctf_iut_flags.sqlite', SQLITE3_OPEN_CREATE | SQLITE3_OPEN_READWRITE);
+                $results = $db->query("SELECT * FROM flags;");
+                while ($row = $results->fetchArray()) {
 
 
-        </section>
+                    ?>
+                    <div class="columns">
+                        <label class="label column"><?php echo htmlspecialchars($row['id']); ?></label>
+                        <label class="label column"><?php echo htmlspecialchars($row['uid']); ?></label>
+                        <label class="label column"><?php echo htmlspecialchars($row['flag']); ?></label>
+                    </div>
+                <?php
+                }
+            }
+        ?>
+
+
+    </section>
 
 
 
-    </body>
+</body>
 
-    </html>
+</html>
