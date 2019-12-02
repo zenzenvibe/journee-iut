@@ -4,6 +4,23 @@
     // POST Data ?
     //
     if ($_POST['etablissement']) {
+        if (!file_exists('conf/ctf_iut.sqlite')) {
+            $db = new SQLite3('conf/ctf_iut.sqlite', SQLITE3_OPEN_CREATE | SQLITE3_OPEN_READWRITE);
+            $createdb=false;
+            if ($createdb) {
+                $result = $db->query('CREATE TABLE IF NOT EXISTS participants (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    etablissement VARCHAR,
+                    nom1 VARCHAR,
+                    prenom1 VARCHAR,
+                    email1 VARCHAR,
+                    nom2 VARCHAR,
+                    prenom2 VARCHAR,
+                    email2 VARCHAR,
+                    uid VARCHAR
+                );');
+            }
+        }
         $db = new PDO('sqlite:conf/ctf_iut.sqlite');
         if ($db) {
             //print("DB ok");
@@ -18,7 +35,8 @@
 
             setcookie('uit_ctf_uid', $uid, time() + (86400 * 30), "/"); // 86400 = 1 day
 
-            $statement = $db->prepare('INSERT INTO participants (etablissement, nom1, prenom1, email1, nom2, prenom2, email2, uid)
+            $statement = $db->prepare('INSERT INTO participants (etablissement, nom1, prenom1, email1,
+             nom2, prenom2, email2, uid)
             VALUES (:etablissement, :nom1, :prenom1, :email1, :nom2, :prenom2, :email2, :uid)');
 
             $statement->execute([
