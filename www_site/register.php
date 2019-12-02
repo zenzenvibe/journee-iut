@@ -6,20 +6,18 @@
     if ($_POST['etablissement']) {
         if (!file_exists('conf/ctf_iut.sqlite')) {
             $db = new SQLite3('conf/ctf_iut.sqlite', SQLITE3_OPEN_CREATE | SQLITE3_OPEN_READWRITE);
-            $createdb=false;
-            if ($createdb) {
-                $result = $db->query('CREATE TABLE IF NOT EXISTS participants (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                    etablissement VARCHAR,
-                    nom1 VARCHAR,
-                    prenom1 VARCHAR,
-                    email1 VARCHAR,
-                    nom2 VARCHAR,
-                    prenom2 VARCHAR,
-                    email2 VARCHAR,
-                    uid VARCHAR
-                );');
-            }
+            $result = $db->query('CREATE TABLE IF NOT EXISTS participants (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                etablissement VARCHAR,
+                nom1 VARCHAR,
+                prenom1 VARCHAR,
+                email1 VARCHAR,
+                nom2 VARCHAR,
+                prenom2 VARCHAR,
+                email2 VARCHAR,
+                uid VARCHAR
+            );');
+            
         }
         $db = new PDO('sqlite:conf/ctf_iut.sqlite');
         if ($db) {
