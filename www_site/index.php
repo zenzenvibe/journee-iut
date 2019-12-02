@@ -29,7 +29,7 @@
             <div class="container">
 
                 <div class="field">
-                    <label class="label">Etablissement scolaire</label>
+                    <label class="label">IUT</label>
                     <div class="control">
                         <div class="select">
                             <select name="etablissement">
