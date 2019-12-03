@@ -1,6 +1,7 @@
 <?php
 
     $etablissements= array (
+        "",
         "01 - Annecy",
         "02 - Auxerre",
         "03 - Bethune",

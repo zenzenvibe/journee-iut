@@ -1,6 +1,7 @@
 <?php
 
     $lycees= array (
+        "",
         "1 Ain",
         "2 Aisne",
         "3 Allier",

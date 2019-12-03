@@ -41,6 +41,7 @@
                             <label class="label column"><?php echo htmlspecialchars($row['nom2']); ?></label>
                             <label class="label column"><?php echo htmlspecialchars($row['prenom2']); ?></label>
                             <label class="label column"><?php echo htmlspecialchars($row['email2']); ?></label>
+                            <label class="label column"><?php echo htmlspecialchars($row['lycee']); ?></label>
                         </div>
                     <?php
                 }

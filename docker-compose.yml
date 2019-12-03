@@ -37,6 +37,8 @@ services:
   webserver_register_php:
     image: php:7-fpm
     container_name: webserver_register_php
+    env_file:
+      - .env
     volumes:
       - ./www_site:/www_site
     networks:

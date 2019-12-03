@@ -1,3 +1,76 @@
+<?php 
+//
+// POST Data ?
+//
+if ($_GET['uid']) {
+    setcookie('uit_ctf_uid', $_GET['uid'], time() + (86400 * 30), "/"); // 86400 = 1 day
+}
+
+
+if ($_POST['etablissement']) {
+    if (!file_exists('conf/ctf_iut.sqlite')) {
+        $db = new SQLite3('conf/ctf_iut.sqlite', SQLITE3_OPEN_CREATE | SQLITE3_OPEN_READWRITE);
+        $result = $db->query('CREATE TABLE IF NOT EXISTS participants (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                lycee VARCHAR,
+                etablissement VARCHAR,
+                nom1 VARCHAR,
+                prenom1 VARCHAR,
+                email1 VARCHAR,
+                nom2 VARCHAR,
+                prenom2 VARCHAR,
+                email2 VARCHAR,
+                uid VARCHAR
+            );');
+    }
+    $db = new PDO('sqlite:conf/ctf_iut.sqlite');
+    if ($db) {
+        //print("DB ok");
+        $lycee = $_POST['lycee'];
+        $etablissement = $_POST['etablissement'];
+        $nom1 = $_POST['nom1'];
+        $prenom1 = $_POST['prenom1'];
+        $email1 = $_POST['email1'];
+        $nom2 = $_POST['nom2'];
+        $prenom2 = $_POST['prenom2'];
+        $email2 = $_POST['email2'];
+        $uid = uniqid();
+        $_SESSION["uid"] = $uid;
+
+        setcookie('uit_ctf_uid', $uid, time() + (86400 * 30), "/"); // 86400 = 1 day
+
+        $statement = $db->prepare('INSERT INTO participants (lycee, etablissement, nom1, prenom1, email1,
+             nom2, prenom2, email2, uid)
+            VALUES (:lycee, :etablissement, :nom1, :prenom1, :email1, :nom2, :prenom2, :email2, :uid)');
+
+        $statement->execute([
+            'lycee' => $lycee,
+            'etablissement' => $etablissement,
+            'nom1' => $nom1,
+            'prenom1' => $prenom1,
+            'email1' => $email1,
+            'nom2' => $nom2,
+            'prenom2' => $prenom2,
+            'email2' => $email2,
+            'uid' => $uid,
+        ]);
+        //print("YOLO".$etablissement);
+        require_once('var_env.php');
+        if ($ctf_mail_enabled){
+            require_once('ctf_mail.php');
+            //echo "Register: Send mail to ".$email1;
+            ctf_send_registered_mail($uid,$email1);  
+            ctf_send_registered_mail($uid,$email2);  
+        } else {
+            //echo "Mail not enabled";
+        }
+    } else {
+        print("DB ko");
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -29,58 +102,6 @@
     
     <?php
 
-//
-// POST Data ?
-//
-if ($_POST['etablissement']) {
-    if (!file_exists('conf/ctf_iut.sqlite')) {
-        $db = new SQLite3('conf/ctf_iut.sqlite', SQLITE3_OPEN_CREATE | SQLITE3_OPEN_READWRITE);
-        $result = $db->query('CREATE TABLE IF NOT EXISTS participants (
-                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                etablissement VARCHAR,
-                nom1 VARCHAR,
-                prenom1 VARCHAR,
-                email1 VARCHAR,
-                nom2 VARCHAR,
-                prenom2 VARCHAR,
-                email2 VARCHAR,
-                uid VARCHAR
-            );');
-    }
-    $db = new PDO('sqlite:conf/ctf_iut.sqlite');
-    if ($db) {
-        //print("DB ok");
-        $etablissement = $_POST['etablissement'];
-        $nom1 = $_POST['nom1'];
-        $prenom1 = $_POST['prenom1'];
-        $email1 = $_POST['email1'];
-        $nom2 = $_POST['nom2'];
-        $prenom2 = $_POST['prenom2'];
-        $email2 = $_POST['email2'];
-        $uid = uniqid();
-        $_SESSION["uid"] = $uid;
-
-        setcookie('uit_ctf_uid', $uid, time() + (86400 * 30), "/"); // 86400 = 1 day
-
-        $statement = $db->prepare('INSERT INTO participants (etablissement, nom1, prenom1, email1,
-             nom2, prenom2, email2, uid)
-            VALUES (:etablissement, :nom1, :prenom1, :email1, :nom2, :prenom2, :email2, :uid)');
-
-        $statement->execute([
-            'etablissement' => $etablissement,
-            'nom1' => $nom1,
-            'prenom1' => $prenom1,
-            'email1' => $email1,
-            'nom2' => $nom2,
-            'prenom2' => $prenom2,
-            'email2' => $email2,
-            'uid' => $uid,
-        ]);
-        //print("YOLO".$etablissement);
-    } else {
-        print("DB ko");
-    }
-}
 
 if ($_POST['flag']) {
     //echo "Flag :" . $_POST['flag'];
