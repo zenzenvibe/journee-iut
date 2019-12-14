@@ -26,8 +26,7 @@
         var title = item[0] + " " + item[1];
 
         if (value == title) {
-
-          document.getElementById("lycee").innerHTML += "<option>" + item + "</option><br>";
+          document.getElementById("lycee").innerHTML += "<option>" + item[2] + "</option><br>";
         }
 
       }
@@ -83,7 +82,26 @@
     require_once('lycees.php');
     ?>
 
-
+<section class="section">
+    <div class="container">
+      <h1 class="title"></h1>
+      <h2 class="subtitle">
+        <strong>Etape 1 :</strong>Remplissez ce formulaire pour votre équipe, qui doit être composée de deux participants du même lycée.
+      </h2>
+      <h2 class="subtitle">
+        <strong>Etape 2 :</strong>Validez vos emails en cliquant sur le lien reçu dans les mails. Les deux emails ont des codes différents.
+      </h2>
+      <h2 class="subtitle">
+        <strong>Etape 3 :</strong>Une fois les deux mails validés, vous recevrez un email de confirmation avec le nom de votre Team.
+      </h2>
+      <h2 class="subtitle">
+        <strong>Etape 4 :</strong>Vous pouvez chercher les flags, de la forme Flag_6b903f4c10a2813fea1fd6f5d3431fb6, qui sont cachés sur ce site web, et les soumettre pour commencer à marquer des points.
+      </h2>
+      <h2 class="subtitle">
+        <strong>Etape 5 :</strong>Rendez-vous le 5 février dans l'IUT de votre choix.
+      </h2>
+    </div>
+  </section>
 
     <section class="section">
 
@@ -106,7 +124,7 @@
       </div>
 
       <div class="field">
-        <label class="label">Lycées</label>
+        <label class="label">Lycée</label>
         <div class="control">
           <div class="select">
             <select name="lycee" id="lycee">
