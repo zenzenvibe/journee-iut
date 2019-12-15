@@ -19,20 +19,21 @@
             <table class="table is-fullwidth">
             <thead>
                     <tr>
-                    <th>Id</th>
+                    <th></th>
+                    <th>N° Arrivé</th>
                     <th>Lycée</th>
                     <th>Team Id</th>
                     <th>Team Name</th>
-                    <th>Id</th>                    
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>eMail</th>                    
-                    <th>eMail validé ?</th>
-                    <th>Id</th>
-                    <th>Nom</th>
-                    <th>Prenom</th>
-                    <th>eMail</th>                    
-                    <th>eMail validé ?</th>
+                    <th>1-Id</th>                    
+                    <th>1-Nom</th>
+                    <th>1-Prénom</th>
+                    <th>1-eMail</th>                    
+                    <th>1-eMail validé ?</th>
+                    <th>2-Id</th>
+                    <th>2-Nom</th>
+                    <th>2-Prenom</th>
+                    <th>2-eMail</th>                    
+                    <th>2-eMail validé ?</th>
                     <th>status</th>
                     <th>Flags</th>
                     </tr>
@@ -40,9 +41,10 @@
                 <tbody>
     <?php   }  ?>
 
-    <?php  function table_row($row) { ;
+    <?php  function table_row($count, $row) { ;
         ?>
                     <tr>
+                        <td><?php echo htmlspecialchars($count); ?></td>
                         <td><?php echo htmlspecialchars($row['id']); ?></td>
                         <td><?php echo htmlspecialchars($row['lycee']); ?></td>
                         <td><?php echo htmlspecialchars($row['uid']); ?></td>
@@ -90,9 +92,11 @@
                         LEFT JOIN flags f
                         on p.uid = f.uid
                         GROUP BY p.id
+                        ORDER BY etablissement, lycee
                     ;");
                     $current_iut="";
                     $current_lycee="";
+                    $count=0;
                     while ($row = $results->fetchArray()) {
 
                         if ($row['etablissement'] != $current_iut) {
@@ -102,8 +106,10 @@
                             echo '<h1 class="title">'.$row['etablissement'].'</h1></br>';
                             $current_iut = $row['etablissement'];
                             table_begin();
+                            $count=0;
                         }
-                        table_row($row);
+                        $count = $count+1;
+                        table_row($count, $row);
                                                 
                     } 
                     table_end()  ;

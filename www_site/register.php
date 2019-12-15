@@ -149,14 +149,34 @@ if (isset($_POST['etablissement'])) {
 // Validate a mail
 //
 
-function getNewTeamName() {
+
+
+function getRandomTeamName() {
     $names_file = file_get_contents('hacker_name.txt');
     $names = $pieces = explode("\n", $names_file);
     $index = rand(0, count($names)-1);
     return $names[$index];
-
-
 }
+
+function isTeamNameAvailable($name){
+    $db = new PDO('sqlite:conf/ctf_iut.sqlite');
+    $statement = $db->prepare('SELECT * FROM participants WHERE teamname=:teamname');
+    $statement->execute(['teamname' => $name]);
+    if ($row = $statement->fetch()){
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function getNewTeamName() {
+    $name = getRandomTeamName();
+    while (!isTeamNameAvailable($name)) {
+        $name = getRandomTeamName();
+    }
+    return $name;
+}
+
 
 if (isset($_GET['uid']) && isset($_GET['uidm'])) {
     $db = new PDO('sqlite:conf/ctf_iut.sqlite');
@@ -174,14 +194,19 @@ if (isset($_GET['uid']) && isset($_GET['uidm'])) {
             'uid' => $_GET['uid'] ,
             'uidm' => $_GET['uidm']
         ]);
-    // 2 mails validated ?
+    // 2 mails validated ? and no teamname
     // Set team name
-    $statement = $db->prepare('SELECT * from participants WHERE ( uid=:uid and ismail1confirmed=true and ismail2confirmed=true )');
+    $statement = $db->prepare('SELECT * from participants WHERE ( uid=:uid and ismail1confirmed=true and ismail2confirmed=true and teamname="no_name_yet" )');
     $statement->execute([
             'uid' => $_GET['uid'] 
     ]);
     if ($row = $statement->fetch()){
         $teamname = getNewTeamName();
+        $uid = $row['uid'];
+        $mail1 = $row['email1'];
+        $uidm1 = $row['uid1'];
+        $mail2 = $row['email2'];
+        $uidm2 = $row['uid2'];
         $statement = $db->prepare('UPDATE participants
         SET teamname=:teamname
         WHERE ( uid=:uid )');
@@ -189,9 +214,13 @@ if (isset($_GET['uid']) && isset($_GET['uidm'])) {
             'teamname' => $teamname,
             'uid' => $_GET['uid'] 
         ]);
+        // Send mail with team name
+        require_once('ctf_mail.php');
+        ctf_send_team_validated_mail($uid  ,$uidm1 , $mail1, $teamname); 
+        ctf_send_team_validated_mail($uid  ,$uidm2 , $mail2, $teamname);
     }
 
-    // Send mail with team name
+    
 }
 
 
@@ -250,58 +279,64 @@ if (isset($_POST['flag'])) {
 
 <?php 
     if (isset($_SESSION["uid"]) || isset($_GET['uid']) || isset($_COOKIE['uit_ctf_uid']) ) {
-    if (isset($_COOKIE['uit_ctf_uid'])) $id = $_COOKIE['uit_ctf_uid'];
-    if (isset($_SESSION["uid"])) $id = $_SESSION["uid"];
-    if (isset($_GET['uid'])) $id = $_GET['uid'];
-    
+        if (isset($_COOKIE['uit_ctf_uid'])) $id = $_COOKIE['uit_ctf_uid'];
+        if (isset($_SESSION["uid"])) $id = $_SESSION["uid"];
+        if (isset($_GET['uid'])) $id = $_GET['uid'];
+        
 
-    $db = new PDO('sqlite:conf/ctf_iut.sqlite');
-    $statement = $db->prepare('SELECT * FROM participants WHERE uid=:uid');
-    $statement->execute([
-        ':uid' => $id
-    ]);
-    $fullValidated = false;
-    $partialValidated = false;
-    if ($row = $statement->fetch()){
-        $fullValidated = $row['ismail1confirmed']&&$row['ismail2confirmed'];
-        $partialValidated = $row['ismail1confirmed']||$row['ismail2confirmed'];
-    } 
+        $db = new PDO('sqlite:conf/ctf_iut.sqlite');
+        $statement = $db->prepare('SELECT * FROM participants WHERE uid=:uid');
+        $statement->execute([
+            ':uid' => $id
+        ]);
+        $fullValidated = false;
+        $partialValidated = false;
+        if ($row = $statement->fetch()){
+            $fullValidated = $row['ismail1confirmed']&&$row['ismail2confirmed'];
+            $partialValidated = $row['ismail1confirmed']||$row['ismail2confirmed'];
+        } 
 
-    if ($partialValidated) {
-    ?>
+        if ($fullValidated) {
+        ?>
+            <form action='' method="post">
+                <div class="container">
+                    <label class="label">Votre équipe est enregistrée, les deux mails sont validés.</label>
+                    </br>
+                    <label class="label">Pour marquer des points, cherchez les Flags sur le site et saisissez les ci-dessous.</br></br></label>
+                    <div class="field">
+                        <label class="label">Flag</label>
+                        <div class="control has-icons-left">
+                            <input class="input" type="text" placeholder="nom" name="flag">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-user"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button class="button is-link">Submit</button>
+                        </div>
 
-        <form action='' method="post">
+                    </div>
+                </div>
+            </form>
+            </section>
+            <a href='/flag.php' hidden=true>Test flag</a>
+        <?php } else if ($partialValidated) { ?>
             <div class="container">
-                <label class="label">Votre équipe est enregistrée.</label>
-                </br>
-                <label class="label">Pour marquer des points, cherchez les Flags sur le site et saisissez les ci-dessous.</br></br></label>
-                <div class="field">
-                    <label class="label">Flag</label>
-                    <div class="control has-icons-left">
-                        <input class="input" type="text" placeholder="nom" name="flag">
-                        <span class="icon is-small is-left">
-                            <i class="fas fa-user"></i>
-                        </span>
-                    </div>
-                </div>
-                <div class="field is-grouped">
-                    <div class="control">
-                        <button class="button is-link">Submit</button>
-                    </div>
+            <label class="label">Votre équipe est enregistrée. </br>Un premier mail est validé.</br>Merci de valider le second mail...</label>
+            </br>
 
-                </div>
-            </div>
-        </form>
-        </section>
-        <a href='/flag.php' hidden=true>Test flag</a>
-    <?php } else { ?>
-        <div class="container">
-        <label class="label">Votre équipe est enregistrée. Merci de valider les mails...</label>
-        </br>
+        </div>
+            </section>
+        <?php } else { ?>
+            <div class="container">
+            <label class="label">Votre équipe est enregistrée. </br>Merci de valider les deux mails...</label>
+            </br>
 
-    </div>
-        </section>
-    <?php } ?>
+        </div>
+            </section>
+        <?php } ?>
 <?php } else { ?>
     <div class="container">
         <label class="label">Merci de vous enregistrer avec le formulaire...</label>
