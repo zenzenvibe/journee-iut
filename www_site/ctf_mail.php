@@ -9,13 +9,13 @@ function getHTML($title, $content) {
     <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-        <title>'.htmlentities($title).'</title>
+        <title>'.($title).'</title>
     </head>
     <body>
     <div style="font-family: Arial, Helvetica, sans-serif; ">
-        <h1>'.htmlentities($title).'</h1>
+        <h1>'.($title).'</h1>
         
-        <p>'.htmlentities($content).'</a></p>
+        <p>'.($content).'</a></p>
     </div>
     </body>
     </html>';
@@ -24,14 +24,13 @@ function getHTML($title, $content) {
 
 function ctf_send_registered_mail($uid, $uidmail, $to) {
     //echo "Send mail to ".$to;
-    $url = "https://".$_SERVER['HTTP_HOST']."/register.php?uid=".$uid."uidm=".$uidmail;
+    $url = "https://".$_SERVER['HTTP_HOST']."/register.php?uid=".$uid."&uidm=".$uidmail;
     
-    $subject = htmlentities("[Day CTF RT] Confirmation d'enregistrement");
-    $title = "[Day CTF RT] Confirmation d'enregistrement";
-    $content ="'Votre dossier d'inscription pour la journée CTF RT est créé. </br>
-        Les deux email doivent être validés.</br>
-        Pour valider votre email, cliquez sur le lien <a href='{{URL}}'>{{URL}}</br>
-        ";
+    $subject = "[Day CTF RT] Confirmation d'enregistrement";
+    $title = htmlentities("[Day CTF RT] Confirmation d'enregistrement");
+    $content =htmlentities("Votre dossier d'inscription pour la journée CTF RT est créé.")."</br>"
+        .htmlentities("Les deux email doivent être validés.")."</br>"
+        .htmlentities("Pour valider votre email, cliquez sur le lien :")."<a href='{{URL}}'>{{URL}}</br>";
     $htmlbody = getHTML($title, $content); 
     $htmlbody = str_replace("{{URL}}", $url, $htmlbody);
   
@@ -41,13 +40,13 @@ function ctf_send_registered_mail($uid, $uidmail, $to) {
 
 function ctf_send_team_validated_mail($uid, $uidmail, $to, $teamname) {
     //echo "Send mail to ".$to;
-    $url = "https://".$_SERVER['HTTP_HOST']."/register.php?uid=".$uid."uidm=".$uidmail;
+    $url = "https://".$_SERVER['HTTP_HOST']."/register.php?uid=".$uid."&uidm=".$uidmail;
     
-    $subject = htmlentities("[Day CTF RT] Team validé");
-    $title = "[Day CTF RT] Team validé";
-    $content ='Vos deux emails sont validés.</br>
-    Le nom de votre team est : '.$teamname.'</br>
-    Vous pouvez commencer à chercher des Flags en cliquant sur le lien  <a href="{{URL}}">{{URL}}';
+    $subject = "[Day CTF RT] Team validé";
+    $title = htmlentities("[Day CTF RT] Team validé");
+    $content =htmlentities("Vos deux emails sont validés.")." </br>"
+    .htmlentities("Le nom de votre team est : ").$teamname.". </br>"
+    .htmlentities("Vous pouvez commencer à chercher des Flags en cliquant sur le lien: ")."<a href='{{URL}}'>{{URL}}";
     $htmlbody = getHTML($title, $content); 
     $htmlbody = str_replace("{{URL}}", $url, $htmlbody);
   

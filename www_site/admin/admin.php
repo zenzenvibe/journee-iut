@@ -9,6 +9,16 @@
     <link rel="stylesheet" href="https://bulma.io/css/bulma-docs.min.css?v=201911141434">
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <link rel="stylesheet" href="/style.css">
+
+    <style>
+        .table-fixed {
+            table-layout: fixed;
+            width: 100%;
+        }
+        .table-container {
+            overflow-x: scroll;
+        }
+    </style>
 </head>
 
 <body>
@@ -16,7 +26,7 @@
     <?php require_once('../header.php'); ?>
     
     <?php  function table_begin() { ?>
-            <table class="table is-fullwidth">
+            <table class="table is-fullwidth table-fixed">
             <thead>
                     <tr>
                     <th></th>

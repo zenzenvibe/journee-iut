@@ -19,7 +19,7 @@ services:
       - webserver_register_php
     labels:
       - "traefik.backend=webserver"
-      - "traefik.docker.network=traefik_ctf_register_lan"
+      - "traefik.docker.network=traefikacme_ctf_register_lan"
       - "traefik.frontend.rule=Host:dayctf.iut-rt.net"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.headers.SSLRedirect=true"

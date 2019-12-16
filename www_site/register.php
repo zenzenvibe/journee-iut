@@ -224,7 +224,23 @@ if (isset($_GET['uid']) && isset($_GET['uidm'])) {
 }
 
 
+function isFlagAlreadyValidated($uid, $validatedFlag){
+    $db = new PDO('sqlite:conf/ctf_iut.sqlite');
+    if ($db) {
+        $uid = $_COOKIE["uit_ctf_uid"];
 
+        $statement = $db->prepare('SELECT * FROM flags WHERE uid=:uid and flag=:flag');
+        $statement->execute([
+            'uid' => $uid,
+            'flag' => $validatedFlag
+        ]);
+        if ($row =  $statement->fetch()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////////
 // Validate FLag
@@ -245,22 +261,28 @@ if (isset($_POST['flag'])) {
             }
         }
         if ($isflagValif) {
-            $msg =  "Flag validé : Félicitation !";
-            include 'msg.php';
-            $db = new PDO('sqlite:conf/ctf_iut.sqlite');
-            if ($db) {
-                $uid = $_COOKIE["uit_ctf_uid"];
-
-                $statement = $db->prepare('INSERT INTO flags (uid, flag)
-                VALUES (:uid, :flag)');
-
-                $statement->execute([
-                    'uid' => $uid,
-                    'flag' => $validatedFlag
-                ]);
-                //print("YOLO".$etablissement);
+            // Déjà validé ?
+            if (isFlagAlreadyValidated($uid, $validatedFlag)) {
+                $msg =  "Flag déjà validé !";
+                include 'msg.php';
             } else {
-                print("DB ko");
+                // Nouveau Flag
+                $msg =  "Flag validé : Félicitation !";
+                include 'msg.php';
+                $db = new PDO('sqlite:conf/ctf_iut.sqlite');
+                if ($db) {
+                    $uid = $_COOKIE["uit_ctf_uid"];
+
+                    $statement = $db->prepare('INSERT INTO flags (uid, flag)
+                    VALUES (:uid, :flag)');
+
+                    $statement->execute([
+                        'uid' => $uid,
+                        'flag' => $validatedFlag
+                    ]);
+                } else {
+                    print("DB ko");
+                }
             }
         } else {
             $msg =  "Flag non valide";
