@@ -5,3 +5,4 @@ traefik.toml
 *.sav
 *.sav2
 htpasswd
+www_site/conf/htpasswd

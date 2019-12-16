@@ -42,9 +42,9 @@ function ctf_send_team_validated_mail($uid, $uidmail, $to, $teamname) {
     //echo "Send mail to ".$to;
     $url = "https://".$_SERVER['HTTP_HOST']."/register.php?uid=".$uid."&uidm=".$uidmail;
     
-    $subject = "[Day CTF RT] Team validé";
+    $subject = "[Day CTF RT] Confirmation de la Team";
     $title = htmlentities("[Day CTF RT] Team validé");
-    $content =htmlentities("Vos deux emails sont validés.")." </br>"
+    $content =htmlentities("Vos deux emails sont validés.")."</br>"
     .htmlentities("Le nom de votre team est : ").$teamname.". </br>"
     .htmlentities("Vous pouvez commencer à chercher des Flags en cliquant sur le lien: ")."<a href='{{URL}}'>{{URL}}";
     $htmlbody = getHTML($title, $content); 

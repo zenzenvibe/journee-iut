@@ -26,7 +26,7 @@
     <?php require_once('../header.php'); ?>
     
     <?php  function table_begin() { ?>
-            <table class="table is-fullwidth table-fixed">
+            <table class="table is-fullwidth">
             <thead>
                     <tr>
                     <th></th>
@@ -82,12 +82,12 @@
 
     <section class="hero is-link">
         <div class="hero-body">
-            <div class="container">
+            <div class="container ">
                 <h1 class="title"> </h1></br>
             </div>
 
 
-            <div class="container">
+            <div class="container table-container">
 
 
                 <?php

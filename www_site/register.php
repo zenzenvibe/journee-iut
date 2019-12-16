@@ -14,7 +14,7 @@ if (isset($_POST['etablissement'])) {
     //
     // Create DB ???
     //
-    $test=true;
+    $test=false;
     if (!file_exists('conf/ctf_iut.sqlite')) {
         $db = new SQLite3('conf/ctf_iut.sqlite', SQLITE3_OPEN_CREATE | SQLITE3_OPEN_READWRITE);
         $result = $db->query('CREATE TABLE IF NOT EXISTS participants (
